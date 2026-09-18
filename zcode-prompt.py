@@ -1215,6 +1215,23 @@ def cmd_reset(args) -> None:
     print(f"记录剩余 {len(remaining)} 条")
 
 
+BANNER = r"""[bold cyan]
+███████╗ ██████╗ ██████╗ ██████╗ ███████╗
+╚════██║██╔════╝██╔═══██╗██╔══██╗██╔════╝
+  ███╔╝ ██║     ██║   ██║██║  ██║█████╗
+ ██╔╝   ██║     ██║   ██║██║  ██║██╔══╝
+███████╗╚██████╗╚██████╔╝██████╔╝███████╗
+╚══════╝ ╚═════╝ ╚═════╝ ╚═════╝ ╚══════╝[/]
+[bold #c792ea]██████╗  █████╗ ████████╗ ██████╗██╗  ██╗
+██╔══██╗██╔══██╗╚══██╔══╝██╔════╝██║  ██║
+██████╔╝███████║   ██║   ██║     ███████║
+██╔═══╝ ██╔══██║   ██║   ██║     ██╔══██║
+██║     ██║  ██║   ██║   ╚██████╗██║  ██║
+╚═╝     ╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝[/]
+[dim]          Dual-use 磁盘补丁  ·  一键默认破限  ·  zcode.cjs[/]
+"""
+
+
 def cmd_tui(_args=None) -> None:
     if not RICH:
         die("TUI 需要 rich 库：python -m pip install rich（或直接使用 status / list / bypass / edit / apply / reset）")
@@ -1233,6 +1250,7 @@ def cmd_tui(_args=None) -> None:
     while True:
         try:
             _console.clear()
+            _console.print(BANNER)
             src = ENGINE.read_text(encoding="utf-8", errors="replace") if ENGINE.is_file() else ""
             official = bool(find_exact_literals(src, OFFICIAL_SAFETY))
             override = bool(find_exact_literals(src, DEFAULT_OVERRIDE))
