@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+.venv/
+venv/
+.env
+*.bak
+*.tmp.cjs
+builtin-edits.json
+builtin-edit-tmp.md
+.DS_Store
+Thumbs.db
