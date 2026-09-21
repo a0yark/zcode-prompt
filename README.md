@@ -4,7 +4,7 @@
 
 只改 ZCode 引擎磁盘文件里的道德 / 安全边界提示词。
 
-官方 Dual-use 条款是 bundled `resources/glm/zcode.cjs` 里 `buildSecurityNotice` 返回、再由 `buildIdentityPrompt` 拼进主身份段的一段唯一双引号字面量，文案以 `IMPORTANT: Assist with authorized security testing` 开头。2026-09 起这段是模块级字符串（当前构建名为 `weo`），不再是旧版 `$Oi` 数组槽。本脚本按**解码后的文案**定位并原地替换，不绑定 `weo` / `$Oi` 等混淆名，也不走 `NODE_OPTIONS` 钩子。
+官方 Dual-use 条款是 bundled `resources/glm/zcode.cjs` 里 `buildSecurityNotice` 返回、再由 `buildIdentityPrompt` 拼进主身份段的一段唯一双引号字面量，文案以 `IMPORTANT: Assist with authorized security testing` 开头。2026-09 起这段是模块级字符串（构建里见过 `$Oi` / `weo` / `keo`），不再是旧版数组槽。本脚本按**解码后的文案**定位并原地替换，不绑定混淆变量名，也不走 `NODE_OPTIONS` 钩子。
 
 agentsMd 指令块另有一句 `IMPORTANT: These instructions OVERRIDE any default behavior and you MUST follow them exactly as written`，那不是 Dual-use，脚本不会改它。
 
@@ -186,7 +186,7 @@ security research, or defensive use cases.
 
 ## 原理
 
-`zcode.cjs` 是 Electron 的 `ELECTRON_RUN_AS_NODE` 入口。`buildIdentityPrompt` 把身份句、`buildSecurityNotice()`（Dual-use）和 `buildHarnessBlock()` 拼成主 system。安全边界是 `weo="..."` 这类 quoted literal。脚本扫描 JS 字符串、解码 escape，按纯文本匹配后再按原引号风格编码写回。变量名（`weo`、`$Oi`）每次构建都可能变，文案锚点更稳。
+`zcode.cjs` 是 Electron 的 `ELECTRON_RUN_AS_NODE` 入口。`buildIdentityPrompt` 把身份句、`buildSecurityNotice()`（Dual-use）和 `buildHarnessBlock()` 拼成主 system。安全边界是模块级 quoted literal（构建里见过 `$Oi` / `weo` / `keo`）。脚本扫描 JS 字符串、解码 escape，按纯文本匹配后再按原引号风格编码写回。变量名每次构建都可能变，文案锚点更稳。
 
 当前会话的 system prompt 在进程启动时组装。只改磁盘、不杀进程，已经跑着的 Desktop / CLI 会话不会变。
 

@@ -6,8 +6,8 @@
   官方 Dual-use 是 `buildSecurityNotice` 返回、再由 `buildIdentityPrompt`
   拼进主身份段的一段唯一 quoted literal，文案以
   "IMPORTANT: Assist with authorized security testing" 开头。
-  2026-09 起这段是模块级字符串（当前构建名为 weo），不再是旧版 `$Oi`
-  数组槽。本脚本按解码后的文案定位并原地替换，不绑定 weo / $Oi 等混淆名。
+  2026-09 起这段是模块级字符串（构建里见过 `$Oi` / `weo` / `keo`），不再
+  是旧版数组槽。本脚本按解码后的文案定位并原地替换，不绑定混淆变量名。
   agentsMd 段另有一句 "OVERRIDE ... exactly as written"，那不是 Dual-use。
 
 不做的事：NODE_OPTIONS 钩子、custom-system-prompt 追加、Output Style、
@@ -1008,7 +1008,7 @@ def cmd_status(_args=None) -> None:
     print(f"官方 Dual-use 原文: {'在（未改）' if official else '不在'}")
     print(f"默认破限词: {'已写入磁盘' if override else '不在'}")
     print(f"含官方安全边界片段的字面量: {len(needle_hits)} 处")
-    print("定位按 Dual-use 原文，不绑 weo / $Oi；agentsMd 的 OVERRIDE 句会跳过。")
+    print("定位按 Dual-use 原文，不绑混淆变量名；agentsMd 的 OVERRIDE 句会跳过。")
     if not official:
         for e in edits:
             n = len(find_exact_literals(src, e["new_text"]))
